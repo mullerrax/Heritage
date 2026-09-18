@@ -1,0 +1,64 @@
+{
+  "GET /api/public/catalog": {
+    "response": {
+      "products": [
+        {
+          "id": "mukluk-black-gold",
+          "name": "Black + Gold Mukluks",
+          "category": "footwear",
+          "categoryLabel": "Handmade footwear",
+          "price": "Enquire for price",
+          "status": "Available to discuss",
+          "description": "A public description of the finished piece.",
+          "material": "Black fur, leather, glass beadwork",
+          "image": "https://cdn.example.com/catalog/mukluk-black-gold.webp",
+          "featured": true,
+          "published": true,
+          "updatedAt": "2026-09-18T12:00:00.000Z"
+        }
+      ],
+      "stories": [
+        {
+          "id": "first-cut",
+          "index": "01 / MATERIAL",
+          "title": "The first cut is a conversation",
+          "excerpt": "A short card excerpt for the homepage.",
+          "tone": "dark",
+          "published": true
+        }
+      ],
+      "reviews": [
+        {
+          "id": "review-1",
+          "name": "Jordan M.",
+          "location": "Yellowknife, NT",
+          "rating": 5,
+          "message": "The care in the stitching is something you can feel the moment you put them on.",
+          "status": "approved",
+          "createdAt": "2026-09-18T12:00:00.000Z"
+        }
+      ]
+    }
+  },
+  "admin_product_fields": {
+    "name": "string, required",
+    "category": "footwear | accessories | custom",
+    "categoryLabel": "string, required",
+    "price": "string, optional because final price may be negotiated",
+    "status": "string",
+    "description": "string, public",
+    "material": "string, public and fact-checked",
+    "image": "absolute HTTPS image URL",
+    "featured": "boolean",
+    "published": "boolean",
+    "updatedAt": "ISO-8601 timestamp"
+  },
+  "review_fields": {
+    "name": "string, required",
+    "location": "string, optional",
+    "rating": "integer from 1 to 5",
+    "message": "string, required",
+    "status": "pending | approved | rejected",
+    "createdAt": "ISO-8601 timestamp"
+  }
+}

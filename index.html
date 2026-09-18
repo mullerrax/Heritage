@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Leather & Sealskin creations — hand-sewn northern footwear and skinwork, made to be worn and remembered." />
+    <title>Leather & Sealskin — Hand-sewn northern skinwear</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="site-grain" aria-hidden="true"></div>
+    <header class="site-header" id="top">
+      <a class="brand" href="#top" aria-label="Leather and Sealskin home">
+        <span class="brand-mark" aria-hidden="true"><span></span><i></i><b></b></span>
+        <span class="brand-copy"><strong>Leather &amp; Sealskin</strong><small>CREATIONS · HAND-SEWN IN THE NORTH</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#collection">Collection</a>
+        <a href="#journal">Journal</a>
+        <a href="#process">Our process</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook">f</a>
+        <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram">◎</a>
+        <a class="text-link" href="admin.html">Admin preview <span>↗</span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy reveal">
+          <div class="wildlife-motif wildlife-motif-fox" aria-hidden="true">
+            <svg viewBox="0 0 240 220" fill="none">
+              <path d="M31 158c31-23 43-58 41-104l28 22 27-36 6 54c26 8 49 30 66 61-22-11-46-13-67-7 18 13 32 29 43 49-23-12-44-17-63-14-18 3-34 1-49-5-12-5-22-11-32-20Z" fill="currentColor" opacity=".12"/>
+              <path d="M74 55c21 12 40 27 56 45m-26-60 28 15m-59 82c28-12 55-12 81 2m-102-11c18 15 38 25 61 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".43"/>
+              <circle cx="139" cy="103" r="3" fill="currentColor" opacity=".55"/>
+            </svg>
+          </div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> Crafted for cold country</p>
+          <h1 id="hero-title">Made by hand.<br /><em>Made to last.</em></h1>
+          <p class="hero-intro">Authentic mukluks, parkas, slippers and skinwork, carefully made in small batches with respect for the material and the stories carried in it.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#collection">Explore the collection <span>↓</span></a>
+            <a class="button button-quiet" href="#journal">Read the stories <span>↗</span></a>
+          </div>
+          <div class="hero-note"><span class="note-dot"></span><span>One-of-a-kind pieces · Enquire directly</span></div>
+        </div>
+        <div class="hero-visual" aria-label="Handmade mukluk photographs">
+          <div class="hero-glow"></div>
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <figure class="hero-image hero-image-back">
+            <img src="assets/mukluks-detail.jpeg" alt="A pair of black and grey hand-beaded mukluks" />
+          </figure>
+          <figure class="hero-image hero-image-front">
+            <img src="assets/mukluks-front.jpeg" alt="A pair of hand-beaded mukluks with braided ties" />
+          </figure>
+          <div class="hero-stamp"><span>01</span><b>HAND<br />SEWN</b><small>NO TWO<br />THE SAME</small></div>
+          <div class="hero-caption">A pair in progress <span>—</span> <b>01 / 03</b></div>
+        </div>
+      </section>
+
+      <section class="trust-strip">
+        <div><span>01</span><strong>Small-batch craft</strong><p>Thoughtful work, made one piece at a time.</p></div>
+        <div><span>02</span><strong>Material with a story</strong><p>Every hide, stitch and bead is chosen with care.</p></div>
+        <div><span>03</span><strong>Direct conversation</strong><p>Ask about fit, materials and custom work on WhatsApp.</p></div>
+      </section>
+
+      <section class="collection-section section-shell" id="collection">
+        <div class="section-heading reveal">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> The current collection</p>
+            <h2>Pieces with <em>presence.</em></h2>
+          </div>
+          <p>Each piece is photographed as it is made. Select a work to see the material notes, process and availability.</p>
+        </div>
+        <div class="collection-toolbar">
+          <div class="filter-pills" role="group" aria-label="Filter collection">
+            <button class="filter-pill active" data-filter="all">All pieces</button>
+            <button class="filter-pill" data-filter="footwear">Footwear</button>
+            <button class="filter-pill" data-filter="accessories">Accessories</button>
+            <button class="filter-pill" data-filter="custom">Custom work</button>
+          </div>
+          <span class="collection-count" id="collection-count">03 works shown</span>
+        </div>
+        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <div class="collection-footer">
+          <p>Availability and pricing can change as pieces find their homes.</p>
+          <a class="button button-outline" href="#contact">Ask about a custom piece <span>↗</span></a>
+        </div>
+      </section>
+
+      <section class="statement-section">
+        <div class="statement-media">
+          <img src="assets/mukluks-front.jpeg" alt="A pair of hand-beaded mukluks with black fur and pale skinwork" />
+          <span class="image-label">From the maker's worktable</span>
+        </div>
+        <div class="statement-copy reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span> More than a product page</p>
+          <h2>A warm pair of hands behind <em>every piece.</em></h2>
+          <p>Good skinwork asks for patience. It is measuring, cutting, softening, stitching and checking the fit again. It is knowing when a material wants to be left alone—and when a small detail will make a piece feel like yours.</p>
+          <p class="quote">“The best work still carries the maker in it.”</p>
+          <a class="text-link dark-link" href="#process">See how the work comes together <span>↗</span></a>
+        </div>
+      </section>
+
+      <section class="journal-section section-shell" id="journal">
+        <div class="section-heading reveal">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Field notes</p>
+            <h2>Stories from the <em>worktable.</em></h2>
+          </div>
+          <p>A growing journal about materials, memory, technique and the people who wear this work.</p>
+        </div>
+        <div class="story-grid" id="story-grid"></div>
+      </section>
+
+      <section class="process-section" id="process">
+        <div class="section-shell process-inner">
+          <div class="process-heading reveal">
+            <p class="eyebrow"><span class="eyebrow-line"></span> The work behind the work</p>
+            <h2>Respect the material.<br /><em>Honor the wearer.</em></h2>
+            <p>These are not factory objects. They are considered pieces made for real weather, real movement and a long life.</p>
+          </div>
+          <div class="process-steps">
+            <article class="process-step reveal"><span>01</span><h3>Choose</h3><p>Materials are selected for their condition, character and intended use.</p></article>
+            <article class="process-step reveal"><span>02</span><h3>Prepare</h3><p>Each hide is cleaned, softened and mapped before a single cut is made.</p></article>
+            <article class="process-step reveal"><span>03</span><h3>Build</h3><p>Patterns, hand-stitching, beadwork and finishing bring the piece together.</p></article>
+            <article class="process-step reveal"><span>04</span><h3>Pass on</h3><p>We talk through fit, care and the story of the finished piece before it travels.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="reviews-section section-shell" id="reviews">
+        <div class="section-heading reveal">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Worn &amp; remembered</p>
+            <h2>Good work travels<br /><em>with its people.</em></h2>
+          </div>
+          <p>Notes from people who have found a pair, commissioned a piece or simply carried the work forward.</p>
+        </div>
+        <div class="reviews-layout">
+          <div class="testimonial-feature">
+            <div class="quote-mark">“</div>
+            <blockquote id="featured-review-text">The care in the stitching is something you can feel the moment you put them on.</blockquote>
+            <div class="review-author"><span class="review-avatar" id="featured-review-avatar">JM</span><span><strong id="featured-review-name">Jordan M.</strong><small id="featured-review-location">Yellowknife, NT</small></span></div>
+          </div>
+          <div class="review-list" id="review-list" aria-live="polite"></div>
+        </div>
+        <div class="review-form-card">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Leave a note</p>
+            <h3>Tell the maker<br /><em>what you felt.</em></h3>
+            <p class="form-helper">Your name and message are enough. In the production version, reviews can be held for approval before they appear publicly.</p>
+          </div>
+          <form id="review-form" class="review-form">
+            <div class="form-row"><label><span>Your name</span><input id="review-name" required maxlength="80" placeholder="e.g. Alex R." /></label><label><span>Location (optional)</span><input id="review-location" maxlength="80" placeholder="e.g. Whitehorse, YT" /></label></div>
+            <label><span>Your review</span><textarea id="review-message" required maxlength="500" placeholder="What made the piece special to you?"></textarea></label>
+            <div class="review-form-bottom"><label class="rating-label"><span>Rating</span><select id="review-rating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></label><button class="button button-primary" type="submit">Share your note <span>↗</span></button></div>
+            <p class="form-success" id="review-success" role="status" hidden>Thank you — your note has been added to this local preview.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="contact-section section-shell" id="contact">
+        <div class="contact-card reveal">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Start a conversation</p>
+            <h2>Found something<br /><em>that feels like yours?</em></h2>
+            <p>There is no checkout here. Tell us which piece caught your eye and we will answer questions about price, sizing, materials, shipping and custom work.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="whatsapp-button" data-whatsapp-general href="#"><span class="whatsapp-icon">◔</span> Message on WhatsApp <span>↗</span></a>
+            <a class="contact-email" href="mailto:hello@example.com">hello@example.com</a>
+            <small>Replace the email and WhatsApp number in <code>app.js</code> before publishing.</small>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-top section-shell">
+        <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span><i></i><b></b></span><span class="brand-copy"><strong>Leather &amp; Sealskin</strong><small>CREATIONS · HAND-SEWN IN THE NORTH</small></span></a>
+        <div class="footer-links"><a href="#collection">Collection</a><a href="#journal">Journal</a><a href="#process">Our process</a><a href="#contact">Contact</a></div>
+        <div class="footer-social"><a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook ↗</a><a href="https://x.com/" target="_blank" rel="noreferrer">X ↗</a></div>
+      </div>
+      <div class="footer-bottom section-shell"><span>© <span id="year"></span> Leather &amp; Sealskin creations</span><span>For those who value the hand behind the work.</span></div>
+    </footer>
+
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <article class="modal-card">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close item details">×</button>
+        <div class="modal-media"><img id="modal-image" src="" alt="" /></div>
+        <div class="modal-body">
+          <p class="eyebrow" id="modal-category"></p>
+          <h2 id="modal-title"></h2>
+          <div class="modal-meta"><span id="modal-price"></span><span id="modal-status"></span></div>
+          <p id="modal-description"></p>
+          <div class="material-note"><span>Material note</span><strong id="modal-material"></strong></div>
+          <a class="whatsapp-button" id="modal-whatsapp" href="#"><span class="whatsapp-icon">◔</span> Enquire about this piece <span>↗</span></a>
+        </div>
+      </article>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
