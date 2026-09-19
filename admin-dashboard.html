@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin dashboard — Leather & Sealskin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body { background: #eee8dd; }
+      .admin-shell { margin: 0 auto; max-width: 1100px; padding: 46px 24px 80px; }
+      .admin-header { align-items: center; display: flex; justify-content: space-between; margin-bottom: 46px; }
+      .admin-header h1 { font-size: clamp(42px, 6vw, 68px); margin: 0; }
+      .admin-header .logout { background: var(--rust); border: 0; color: #fff; cursor: pointer; font-size: 11px; font-weight: 800; padding: 10px 16px; }
+      .admin-grid { display: grid; gap: 24px; grid-template-columns: .75fr 1.25fr; }
+      .admin-panel { background: #f6f2ea; border: 1px solid var(--line); padding: 28px; }
+      .admin-panel h2 { font-size: 32px; margin-bottom: 25px; }
+      .admin-panel label { color: var(--ink-soft); display: block; font-size: 10px; font-weight: 800; letter-spacing: .6px; margin: 16px 0 7px; text-transform: uppercase; }
+      .admin-panel input, .admin-panel select, .admin-panel textarea { background: #fff; border: 1px solid var(--line); font: 12px var(--sans); padding: 12px; width: 100%; box-sizing: border-box; }
+      .admin-panel textarea { min-height: 90px; resize: vertical; }
+      .admin-panel button { background: var(--rust); border: 0; color: #fff; cursor: pointer; font-size: 11px; font-weight: 800; margin-top: 20px; padding: 15px 18px; width: 100%; }
+      .admin-panel button:disabled { opacity: .6; cursor: not-allowed; }
+      .admin-status { font-size: 11px; margin-top: 12px; padding: 8px; }
+      .admin-status.success { background: #efe; color: #3a3; }
+      .admin-status.error { background: #fee; color: #c33; }
+      .admin-status.loading { background: #eef; color: #33c; }
+      .admin-list { display: grid; gap: 12px; }
+      .admin-item { align-items: center; background: #fff; border: 1px solid var(--line); display: flex; gap: 15px; padding: 12px; }
+      .admin-item img { height: 76px; object-fit: cover; width: 62px; }
+      .admin-item h3 { font: 500 20px var(--serif); margin: 0 0 4px; }
+      .admin-item p { color: var(--ink-soft); font-size: 10px; margin: 0; }
+      .admin-item button { background: transparent; border: 0; color: var(--rust); cursor: pointer; font-size: 10px; font-weight: 800; margin-left: auto; width: auto; padding: 0; }
+      .admin-note { background: #ded1bd; color: var(--ink-soft); font-size: 11px; line-height: 1.6; margin-top: 24px; padding: 16px; }
+      .admin-note strong { color: var(--ink); }
+      .back-link { font-size: 11px; font-weight: 800; }
+      @media (max-width: 750px) { .admin-grid { grid-template-columns: 1fr; } .admin-header { flex-direction: column; align-items: flex-start; } .admin-header .logout { align-self: flex-end; } }
+    </style>
+  </head>
+  <body>
+    <div class="admin-shell">
+      <div class="admin-header">
+        <h1>Admin <em>dashboard.</em></h1>
+        <button class="logout" id="logout-button">Sign out</button>
+      </div>
+      <div class="admin-grid">
+        <form class="admin-panel" id="product-form">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Add a work</p>
+          <h2>New product</h2>
+          <label for="name">Product name</label>
+          <input id="name" required placeholder="e.g. Raven Trail Mukluks" />
+          
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="footwear">Footwear</option>
+            <option value="accessories">Accessories</option>
+            <option value="custom">Custom work</option>
+          </select>
+          
+          <label for="price">Price display</label>
+          <input id="price" required placeholder="Enquire for price" />
+          
+          <label for="material">Material note</label>
+          <input id="material" required placeholder="Leather, fur, beadwork..." />
+          
+          <label for="image">Image URL</label>
+          <input id="image" required placeholder="https://example.com/product.jpg" />
+          
+          <label for="description">Description</label>
+          <textarea id="description" required placeholder="Tell visitors what makes this piece special."></textarea>
+          
+          <button type="submit" id="product-submit">Save product</button>
+          <div class="admin-status" id="product-status" hidden></div>
+          
+          <div class="admin-note"><strong>Note:</strong> Image must be a valid HTTPS URL. In production, implement file upload to cloud storage.</div>
+        </form>
+        
+        <section class="admin-panel">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Published catalog</p>
+          <h2>Products</h2>
+          <div class="admin-list" id="product-list">Loading...</div>
+        </section>
+      </div>
+      
+      <div class="admin-grid" style="margin-top: 24px;">
+        <form class="admin-panel" id="story-form">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Add a story</p>
+          <h2>New story</h2>
+          
+          <label for="story-index">Story label</label>
+          <input id="story-index" required placeholder="04 / PROCESS" />
+          
+          <label for="story-title">Story title</label>
+          <input id="story-title" required placeholder="The hands remember the pattern" />
+          
+          <label for="story-excerpt">Short excerpt</label>
+          <textarea id="story-excerpt" required placeholder="A short introduction for the homepage."></textarea>
+          
+          <button type="submit" id="story-submit">Save story</button>
+          <div class="admin-status" id="story-status" hidden></div>
+        </form>
+        
+        <section class="admin-panel">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Published stories</p>
+          <h2>Stories</h2>
+          <div class="admin-list" id="story-list">Loading...</div>
+        </section>
+      </div>
+    </div>
+    <script src="admin-dashboard.js"></script>
+  </body>
+</html>

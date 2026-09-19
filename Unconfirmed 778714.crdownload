@@ -1,0 +1,215 @@
+const API_BASE_URL = "https://heritage-skinwear-backend.vercel.app";
+
+// Check if user is logged in
+function checkAuth() {
+  const token = localStorage.getItem("heritage_admin_token");
+  if (!token) {
+    window.location.href = "admin-login.html";
+  }
+  return token;
+}
+
+const token = checkAuth();
+
+// Logout
+document.getElementById("logout-button").addEventListener("click", () => {
+  localStorage.removeItem("heritage_admin_token");
+  localStorage.removeItem("heritage_admin_email");
+  window.location.href = "admin-login.html";
+});
+
+// Show status message
+function showStatus(elementId, message, type) {
+  const el = document.getElementById(elementId);
+  el.textContent = message;
+  el.className = `admin-status ${type}`;
+  el.hidden = false;
+  if (type !== "loading") {
+    setTimeout(() => el.hidden = true, 4000);
+  }
+}
+
+// Fetch products
+async function loadProducts() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/public/catalog`);
+    if (!response.ok) throw new Error("Failed to load products");
+    
+    const data = await response.json();
+    const products = Array.isArray(data.products) ? data.products : [];
+    
+    const list = document.getElementById("product-list");
+    if (!products.length) {
+      list.innerHTML = '<p style="color: var(--ink-soft); font-size: 12px;">No products yet. Add one above.</p>';
+      return;
+    }
+    
+    list.innerHTML = products.map(p => `
+      <div class="admin-item">
+        <img src="${escape(p.image)}" alt="" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'" />
+        <div>
+          <h3>${escape(p.name)}</h3>
+          <p>${escape(p.category)} · ${escape(p.price)}</p>
+        </div>
+        <button type="button" class="delete-product" data-id="${escape(p.id)}">Delete</button>
+      </div>
+    `).join("");
+    
+    document.querySelectorAll(".delete-product").forEach(btn => {
+      btn.addEventListener("click", () => deleteProduct(btn.dataset.id));
+    });
+  } catch (error) {
+    document.getElementById("product-list").innerHTML = `<p style="color: var(--rust);">Error: ${error.message}</p>`;
+  }
+}
+
+// Fetch stories
+async function loadStories() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/public/catalog`);
+    if (!response.ok) throw new Error("Failed to load stories");
+    
+    const data = await response.json();
+    const stories = Array.isArray(data.stories) ? data.stories : [];
+    
+    const list = document.getElementById("story-list");
+    if (!stories.length) {
+      list.innerHTML = '<p style="color: var(--ink-soft); font-size: 12px;">No stories yet. Add one above.</p>';
+      return;
+    }
+    
+    list.innerHTML = stories.map(s => `
+      <div class="admin-item">
+        <div>
+          <h3>${escape(s.title)}</h3>
+          <p>${escape(s.index_label || s.index)} · ${escape(s.excerpt)}</p>
+        </div>
+        <button type="button" class="delete-story" data-id="${escape(s.id)}">Delete</button>
+      </div>
+    `).join("");
+    
+    document.querySelectorAll(".delete-story").forEach(btn => {
+      btn.addEventListener("click", () => deleteStory(btn.dataset.id));
+    });
+  } catch (error) {
+    document.getElementById("story-list").innerHTML = `<p style="color: var(--rust);">Error: ${error.message}</p>`;
+  }
+}
+
+// Create product
+document.getElementById("product-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const submit = document.getElementById("product-submit");
+  submit.disabled = true;
+  showStatus("product-status", "Saving...", "loading");
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/admin/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: document.getElementById("name").value,
+        category: document.getElementById("category").value,
+        price: document.getElementById("price").value,
+        material: document.getElementById("material").value,
+        image_url: document.getElementById("image").value,
+        description: document.getElementById("description").value
+      })
+    });
+    
+    if (!response.ok) throw new Error("Failed to save product");
+    
+    showStatus("product-status", "Product saved!", "success");
+    e.target.reset();
+    loadProducts();
+  } catch (error) {
+    showStatus("product-status", error.message, "error");
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+// Delete product
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/admin/products/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    
+    if (!response.ok) throw new Error("Failed to delete");
+    loadProducts();
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+}
+
+// Create story
+document.getElementById("story-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const submit = document.getElementById("story-submit");
+  submit.disabled = true;
+  showStatus("story-status", "Saving...", "loading");
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/admin/stories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        slug: `story-${Date.now()}`,
+        index_label: document.getElementById("story-index").value,
+        title: document.getElementById("story-title").value,
+        excerpt: document.getElementById("story-excerpt").value,
+        tone: "sand"
+      })
+    });
+    
+    if (!response.ok) throw new Error("Failed to save story");
+    
+    showStatus("story-status", "Story saved!", "success");
+    e.target.reset();
+    loadStories();
+  } catch (error) {
+    showStatus("story-status", error.message, "error");
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+// Delete story
+async function deleteStory(id) {
+  if (!confirm("Delete this story?")) return;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/admin/stories/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    
+    if (!response.ok) throw new Error("Failed to delete");
+    loadStories();
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+}
+
+// Escape HTML
+function escape(str) {
+  return String(str || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+  }[c]));
+}
+
+// Load on startup
+loadProducts();
+loadStories();

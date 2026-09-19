@@ -1,0 +1,206 @@
+/* 
+  FRONTEND DATA ADAPTER
+  Fetches products and stories from the backend API.
+  Falls back to localStorage if API is unavailable.
+*/
+
+const HERITAGE_CONFIG = {
+  whatsappNumber: "15551234567",
+  apiBaseUrl: "https://heritage-skinwear-backend.vercel.app",
+  social: {
+    instagram: "https://www.instagram.com/",
+    facebook: "https://www.facebook.com/",
+    x: "https://x.com/"
+  }
+};
+
+const demoProducts = [
+  {
+    id: "demo-1",
+    name: "Black + Gold Mukluks",
+    category: "footwear",
+    categoryLabel: "Handmade footwear",
+    price: "Enquire for price",
+    status: "Available to discuss",
+    description: "A statement pair with soft black fur, pale leather, hand-beaded floral panels and braided ties.",
+    material: "Black fur, leather, glass beadwork",
+    image: "assets/mukluks-detail.jpeg",
+    featured: true
+  },
+  {
+    id: "demo-2",
+    name: "Snowbird Mukluks",
+    category: "footwear",
+    categoryLabel: "Handmade footwear",
+    price: "Enquire for price",
+    status: "One pair shown",
+    description: "Soft grey and black skinwork with a quiet floral motif.",
+    material: "Grey skin, black fur, hand-sewn beadwork",
+    image: "assets/mukluks-front.jpeg",
+    featured: true
+  }
+];
+
+const demoStories = [
+  { id: "demo-story-1", index: "01 / MATERIAL", title: "The first cut is a conversation", excerpt: "Before a pattern is drawn, the hide is read for grain, strength and the life it is ready to have next.", tone: "dark" },
+  { id: "demo-story-2", index: "02 / DETAIL", title: "A flower in the cold", excerpt: "Small colour, close to the wearer. Why hand-beaded details keep showing up in the work.", tone: "sand" },
+  { id: "demo-story-3", index: "03 / CARE", title: "Wear it. Air it. Keep it close.", excerpt: "Simple care notes for pieces made from natural materials.", tone: "sage" }
+];
+
+let products = [];
+let selectedFilter = "all";
+
+// Get cached catalog from localStorage
+function getLocalCatalog() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("heritageCatalog") || "null");
+    return saved && Array.isArray(saved.products)
+      ? { products: saved.products, stories: Array.isArray(saved.stories) && saved.stories.length ? saved.stories : demoStories }
+      : { products: demoProducts, stories: demoStories };
+  } catch {
+    return { products: demoProducts, stories: demoStories };
+  }
+}
+
+// Fetch catalog from backend API
+async function loadCatalog() {
+  if (!HERITAGE_CONFIG.apiBaseUrl) {
+    console.warn("No API configured; using local demo");
+    return getLocalCatalog();
+  }
+  
+  try {
+    const response = await fetch(`${HERITAGE_CONFIG.apiBaseUrl}/api/public/catalog`);
+    if (response.ok) {
+      const data = await response.json();
+      // Cache in localStorage as fallback
+      localStorage.setItem("heritageCatalog", JSON.stringify(data));
+      return data;
+    }
+  } catch (error) {
+    console.warn("API unavailable; using cached/demo catalog", error);
+  }
+  
+  return getLocalCatalog();
+}
+
+function renderProducts() {
+  const grid = document.querySelector("#product-grid");
+  const count = document.querySelector("#collection-count");
+  const visible = products.filter(product => selectedFilter === "all" || product.category === selectedFilter);
+  count.textContent = `${String(visible.length).padStart(2, "0")} works shown`;
+  
+  if (!visible.length) {
+    grid.innerHTML = `<div class="empty-state">No pieces in this category yet. Ask about a custom work instead.</div>`;
+    return;
+  }
+  
+  grid.innerHTML = visible.map((product, index) => `
+    <article class="product-card reveal is-visible" data-product-id="${escapeHtml(product.id)}" tabindex="0" role="button" aria-label="View ${escapeHtml(product.name)}">
+      <div class="product-image">
+        <span class="product-badge">${escapeHtml(product.categoryLabel || product.category)}</span>
+        <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="${index ? "lazy" : "eager"}" />
+        <span class="product-arrow">↗</span>
+      </div>
+      <div class="product-info">
+        <div class="product-info-top"><h3>${escapeHtml(product.name)}</h3><span class="product-price">${escapeHtml(product.price)}</span></div>
+        <p>${escapeHtml(product.material)}</p>
+      </div>
+    </article>
+  `).join("");
+  
+  grid.querySelectorAll(".product-card").forEach(card => {
+    card.addEventListener("click", () => openProduct(card.dataset.productId));
+    card.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") openProduct(card.dataset.productId); });
+  });
+}
+
+function renderStories(stories) {
+  const grid = document.querySelector("#story-grid");
+  grid.innerHTML = stories.slice(0, 3).map((story, index) => `
+    <article class="story-card reveal is-visible">
+      <span class="story-index">${escapeHtml(story.index || story.index_label)}</span>
+      <h3>${escapeHtml(story.title)}</h3>
+      <p>${escapeHtml(story.excerpt)}</p>
+      <a class="story-link" href="#contact">Read the note <span>↗</span></a>
+      ${index === 1 ? `<svg class="story-card-decoration" viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M12 75C30 43 37 14 87 23M20 83C47 64 62 37 81 12M27 53c11 1 24 6 31 15M43 35c13 0 25 5 32 14" stroke="#793a2a" stroke-width="1.4"/><circle cx="75" cy="20" r="7" stroke="#793a2a"/></svg>` : "" }
+    </article>
+  `).join("");
+}
+
+function openProduct(productId) {
+  const product = products.find(item => item.id === productId);
+  if (!product) return;
+  
+  document.querySelector("#modal-image").src = product.image;
+  document.querySelector("#modal-image").alt = product.name;
+  document.querySelector("#modal-category").innerHTML = `<span class="eyebrow-line"></span> ${escapeHtml(product.categoryLabel || product.category)}`;
+  document.querySelector("#modal-title").textContent = product.name;
+  document.querySelector("#modal-price").textContent = product.price;
+  document.querySelector("#modal-status").textContent = product.status || "Enquire directly";
+  document.querySelector("#modal-description").textContent = product.description;
+  document.querySelector("#modal-material").textContent = product.material;
+  document.querySelector("#modal-whatsapp").href = whatsappLink(product);
+  document.querySelector("#product-modal").hidden = false;
+  document.body.classList.add("modal-open");
+  document.querySelector(".modal-close").focus();
+}
+
+function closeModal() {
+  document.querySelector("#product-modal").hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function whatsappLink(product) {
+  const text = `Hello, I found "${product ? product.name : "a piece"}" on the Leather & Sealskin website. I would like to ask about ${product ? product.price.toLowerCase() : "availability"}, sizing and shipping.`;
+  return `https://wa.me/${HERITAGE_CONFIG.whatsappNumber}?text=${encodeURIComponent(text)}`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+}
+
+function init() {
+  loadCatalog().then(catalog => {
+    products = Array.isArray(catalog.products) ? catalog.products : demoProducts;
+    renderProducts();
+    renderStories(Array.isArray(catalog.stories) ? catalog.stories : demoStories);
+  });
+  
+  document.querySelector("#year").textContent = new Date().getFullYear();
+  
+  document.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
+    selectedFilter = button.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach(item => item.classList.toggle("active", item === button));
+    renderProducts();
+  }));
+  
+  document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", closeModal));
+  document.addEventListener("keydown", event => { if (event.key === "Escape") closeModal(); });
+  
+  document.querySelector("[data-whatsapp-general]").href = whatsappLink();
+  
+  // Link to admin dashboard
+  const adminLink = document.querySelector('a[href="admin.html"]');
+  if (adminLink) {
+    adminLink.href = "admin-login.html";
+    adminLink.textContent = "Admin dashboard ↗";
+  }
+  
+  const menuToggle = document.querySelector(".menu-toggle");
+  menuToggle.addEventListener("click", () => {
+    const nav = document.querySelector(".main-nav");
+    const open = nav.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(open));
+  });
+  
+  document.querySelectorAll(".main-nav a").forEach(link => link.addEventListener("click", () => document.querySelector(".main-nav").classList.remove("open")));
+  
+  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+  }), { threshold: .12 });
+  
+  document.querySelectorAll(".reveal").forEach(element => observer.observe(element));
+}
+
+init();

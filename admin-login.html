@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin login — Leather & Sealskin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body { background: #eee8dd; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+      .login-container { background: #f6f2ea; border: 1px solid var(--line); padding: 48px; max-width: 400px; width: 100%; }
+      .login-container h1 { font-size: 32px; margin-bottom: 8px; }
+      .login-container p { color: var(--ink-soft); font-size: 12px; margin-bottom: 32px; }
+      .login-form label { color: var(--ink-soft); display: block; font-size: 10px; font-weight: 800; letter-spacing: .6px; margin: 16px 0 7px; text-transform: uppercase; }
+      .login-form input { background: #fff; border: 1px solid var(--line); font: 12px var(--sans); padding: 12px; width: 100%; }
+      .login-form button { background: var(--rust); border: 0; color: #fff; cursor: pointer; font-size: 11px; font-weight: 800; margin-top: 24px; padding: 15px 18px; width: 100%; }
+      .login-form button:disabled { opacity: .6; cursor: not-allowed; }
+      .login-error { background: #fee; border: 1px solid #fcc; color: #c33; font-size: 12px; margin-bottom: 16px; padding: 12px; }
+      .login-loading { opacity: .6; }
+      .back-link { display: inline-block; font-size: 11px; font-weight: 800; margin-bottom: 24px; }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <a class="back-link" href="index.html">← Back to site</a>
+      <h1>Admin <em>login.</em></h1>
+      <p>Enter your credentials to manage products and stories.</p>
+      <form class="login-form" id="login-form">
+        <div id="error-message" class="login-error" hidden></div>
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="admin@heritage.com" />
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="••••••••" />
+        <button type="submit" id="submit-button">Sign in</button>
+        <p style="color: var(--ink-soft); font-size: 10px; margin-top: 16px;">API endpoint: <code id="api-url" style="font-size: 9px;"></code></p>
+      </form>
+    </div>
+    <script src="admin-login.js"></script>
+  </body>
+</html>
